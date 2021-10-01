@@ -1,15 +1,28 @@
 import React from "react";
-import {View, StyleSheet, Text, Button} from 'react-native'
+import {Button, StyleSheet, Text, View} from 'react-native'
 
 export const TodoScreen = ({goBack, todo}) => {
     return (
         <View>
             <Text>{todo.title}</Text>
-            <Button title="Назад" onPress={goBack}/>
+            <View style={styles.buttons}>
+                <View style={styles.button}>
+                    <Button color='#757575' title="Назад" onPress={goBack}/>
+                </View>
+                <View style={styles.button}>
+                    <Button color='#e53935' title="Удалить" onPress={() => console.log('to remove')}/>
+                </View>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-
+    buttons: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    button: {
+        width: '40%'
+    }
 })
