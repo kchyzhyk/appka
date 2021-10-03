@@ -10,7 +10,12 @@ export const EditModal = ({visible, onCancel}) => {
                transparent={false}
         >
             <View style={styles.wrap}>
-                <TextInput style={styles.input}/>
+                <TextInput style={styles.input}
+                           placeholder='Введите название'
+                           autoCapitalize="none"
+                           autoCorrect={false}
+                           maxLength={64}
+                />
                 <View style={styles.buttons}>
                     <Button color={THEME.DANGER_COLOR} title="Отменить" onPress={onCancel}/>
                     <Button title="Сохранить"/>
