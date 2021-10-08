@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, StyleSheet, TextInput, View, Alert} from 'react-native';
+import {StyleSheet, TextInput, View, Alert} from 'react-native';
 import {THEME} from "../theme";
 import {AntDesign} from "@expo/vector-icons";
 
