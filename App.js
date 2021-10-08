@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading'
+import {} from '@expo/vector-icons'
 
 import {Navbar} from "./src/components/Navbar";
 import {MainScreen} from "./src/screens/MainScreen";
