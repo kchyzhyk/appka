@@ -2,7 +2,6 @@ import React, {useState} from 'react';
 import {Alert, StyleSheet, View} from 'react-native';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading'
-import {} from '@expo/vector-icons'
 
 import {Navbar} from "./src/components/Navbar";
 import {MainScreen} from "./src/screens/MainScreen";
@@ -18,9 +17,7 @@ async function loadApplication() {
 export default function App() {
     const [isReady, setIsReady] = useState(false)
     const [todoId, setTodoId] = useState(null)
-    const [todos, setTodos] = useState([
-        // {id: '1', title: 'Hello'}
-    ])
+    const [todos, setTodos] = useState([])
 
     if (!isReady) {
         return <AppLoading startAsync={loadApplication}
@@ -56,7 +53,6 @@ export default function App() {
             ],
             {cancelable: false},
         )
-
     }
 
     const updateTodo = (id, title) => {
