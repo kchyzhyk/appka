@@ -6,6 +6,7 @@ import AppLoading from 'expo-app-loading'
 import {Navbar} from "./src/components/Navbar";
 import {MainScreen} from "./src/screens/MainScreen";
 import {TodoScreen} from "./src/screens/ToDoScreen";
+import {THEME} from "./src/theme";
 
 async function loadApplication() {
     return await Font.loadAsync({
@@ -96,6 +97,6 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         paddingVertical: 20,
-        paddingHorizontal: 10,
+        paddingHorizontal: THEME.PADDING_HORIZONTAL,
     }
 });
