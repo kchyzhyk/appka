@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1
     },
     text:{
-        color: 'white',
+        color: Platform.OS === 'ios' ? THEME.MAIN_COLOR : '#fff' ,
         fontSize: 20
     }
 })
