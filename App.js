@@ -1,11 +1,6 @@
 import React, {useState} from 'react';
-import {Alert, StyleSheet, View} from 'react-native';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading'
-
-
-import {MainScreen} from "./src/screens/MainScreen";
-import {TodoScreen} from "./src/screens/ToDoScreen";
 
 import {MainLayout} from "./src/MainLayout";
 import {TodoState} from "./src/context/todo/TodoState";
