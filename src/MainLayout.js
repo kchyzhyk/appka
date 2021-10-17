@@ -10,7 +10,7 @@ import {TodoContext} from "./context/todo/todoContext";
 export const MainLayout = () => {
     const {todos, addTodo, removeTodo, updateTodo}  = useContext(TodoContext)
     const [todoId, setTodoId] = useState(null)
-   
+
     let content = (
         <MainScreen
             addTodo={addTodo}
