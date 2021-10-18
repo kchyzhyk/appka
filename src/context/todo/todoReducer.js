@@ -13,12 +13,14 @@ const handlers = {
     [REMOVE_TODO]: (state, {id}) => ({ ...state,
         todos: state.todos.filter(todo => todo.id !== id)}),
 
-    [UPDATE_TODO]: (state, {title, id}) => ({
+    [UPDATE_TODO]: (state, { title, id }) => ({
     ...state,
         todos: state.todos.map(todo => {
             if (todo.id === id) {
                 todo.title = title
-    }})
+    }
+        return todo
+        })
     }),
     DEFAULT: state => state
 }
