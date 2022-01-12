@@ -1,10 +1,13 @@
-import React, {useContext, useEffect, useState, useCallback} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import {Dimensions, FlatList, Image, StyleSheet, View} from 'react-native'
 import {AddTodo} from "../components/AddTodo";
 import {Todo} from "../components/Todo";
 import {THEME} from "../theme";
 import {TodoContext} from "../context/todo/todoContext";
 import {ScreenContext} from "../context/screen/screenContext";
+import {AppLoader} from "../components/ui/AppLoader";
+import {AppText} from "../components/ui/AppText";
+import {AppButton} from "../components/ui/AppButton";
 
 export const MainScreen = () => {
     const {addTodo, todos, removeTodo, fetchTodos, loading, error} = useContext(TodoContext)
@@ -15,7 +18,7 @@ export const MainScreen = () => {
 
     useEffect(() => {
         loadTodos()
-    },[])
+    }, [])
 
     useEffect(() => {
         const update = () => {
@@ -28,6 +31,18 @@ export const MainScreen = () => {
             Dimensions.removeEventListener('change', update)
         }
     })
+
+    if (loading) {
+        return <AppLoader/>
+    }
+
+    if (error) {
+        return <View style={styles.center}>
+            <AppText style={styles.error}>{error}</AppText>
+            <AppButton onPress={loadTodos}>Повторить</AppButton>
+        </View>
+    }
+
     let content = (
         <View style={{width: deviceWidth}}>
             <FlatList
@@ -64,5 +79,14 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
+    },
+    center: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    error: {
+        fontSize: 20,
+        color: THEME.DANGER_COLOR
     }
 })
