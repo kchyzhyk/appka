@@ -1,8 +1,7 @@
 import React, { useReducer, useContext } from "react";
 import {TodoContext} from './todoContext'
 import {todoReducer} from "./todoReducer";
-import {ADD_TODO, HIDE_LOADER, REMOVE_TODO, SHOW_ERROR, SHOW_LOADER, UPDATE_TODO} from "../types";
-import {ScreenState} from "../screen/ScreenState";
+import {ADD_TODO, FETCH_TODOS, HIDE_LOADER, REMOVE_TODO, SHOW_ERROR, SHOW_LOADER, UPDATE_TODO} from "../types";
 import {ScreenContext} from "../screen/screenContext";
 import {Alert} from "react-native";
 
@@ -22,8 +21,8 @@ export const TodoState = ({ children }) => {
             body: JSON.stringify({title})
         })
         const data = await response.json()
-        console.log('DATA', data)
-        dispatch({type: ADD_TODO, title})
+        console.log('ID', data.name)
+        dispatch({type: ADD_TODO, title, id: data.name })
     }
 
     const removeTodo = id => {
@@ -49,6 +48,18 @@ export const TodoState = ({ children }) => {
         )
     }
 
+    const fetchTodos =async () => {
+        const response = await fetch('https://rn-appka-default-rtdb.firebaseio.com/todos.json', {
+            method:'GET',
+            headers: {'Content-Type': 'application/json'}
+        })
+        const data = await response.json()
+        console.log('fetch data', data)
+        const todos = Object.keys(data).map(key => ({...data[key], id: key}))
+        setTimeout(() => dispatch({type: FETCH_TODOS, todos}), 5000)
+
+    }
+
     const updateTodo = (id, title) => dispatch({type: UPDATE_TODO, id, title})
 
     const showLoader = () => dispatch({type: SHOW_LOADER})
@@ -62,9 +73,12 @@ export const TodoState = ({ children }) => {
     return <TodoContext.Provider
         value={{
             todos: state.todos,
+            loading: state.loading,
+            error: state.error,
             addTodo,
             removeTodo,
-            updateTodo
+            updateTodo,
+            fetchTodos
         }}
     >
         {children}
