@@ -1,4 +1,4 @@
-import React, { useReducer, useContext } from "react";
+import React, {useContext, useReducer} from "react";
 import {TodoContext} from './todoContext'
 import {todoReducer} from "./todoReducer";
 import {
@@ -13,8 +13,9 @@ import {
 } from "../types";
 import {ScreenContext} from "../screen/screenContext";
 import {Alert} from "react-native";
+import {Http} from "../../http";
 
-export const TodoState = ({ children }) => {
+export const TodoState = ({children}) => {
     const initialState = {
         todos: [],
         loading: false,
@@ -24,18 +25,21 @@ export const TodoState = ({ children }) => {
     const [state, dispatch] = useReducer(todoReducer, initialState)
 
     const addTodo = async title => {
-        const response = await fetch('https://rn-appka-default-rtdb.firebaseio.com/todos.json', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({title})
-        })
-        const data = await response.json()
-        console.log('ID', data.name)
-        dispatch({type: ADD_TODO, title, id: data.name })
+        clearError()
+
+        try {
+            const data = await Http.post(
+                'https://rn-appka-default-rtdb.firebaseio.com/todos.json',
+                {title})
+            dispatch({type: ADD_TODO, title, id: data.name})
+        } catch (e) {
+            // showError('Что-то пошло не так...')
+            showError('addTodo')
+        }
     }
 
     const removeTodo = id => {
-        const todo = state.todos.find(t => t.id === id )
+        const todo = state.todos.find(t => t.id === id)
         Alert.alert(
             'Удаление элемента',
             `Вы уверены, что хотите удалить "${todo.title}"`,
@@ -47,31 +51,25 @@ export const TodoState = ({ children }) => {
                 {
                     text: 'Удалить',
                     style: 'destructive',
-                    onPress: () => {
-                       changeScreen(null)
-                       dispatch({type: REMOVE_TODO, id})
+                    onPress: async () => {
+                        changeScreen(null)
+                        await Http.delete(`https://rn-appka-default-rtdb.firebaseio.com/todos/${id}.json`)
+                        dispatch({type: REMOVE_TODO, id})
                     }
                 }
             ],
-            { cancelable: false }
+            {cancelable: false}
         )
     }
 
-    const fetchTodos =async () => {
+    const fetchTodos = async () => {
         showLoader()
         clearError()
         try {
-            const response = await fetch('https://rn-appka-default-rtdb.firebaseio.com/todos.json', {
-                method:'GET',
-                headers: {'Content-Type': 'application/json'}
-            })
-            const data = await response.json()
-            console.log('fetch data', data)
+            const data = await Http.get('https://rn-appka-default-rtdb.firebaseio.com/todos.json')
             const todos = Object.keys(data).map(key => ({...data[key], id: key}))
             dispatch({type: FETCH_TODOS, todos})
-
-        }
-        catch (e) {
+        } catch (e) {
             showError('Что-то пошло не так, попробуйте снова')
             console.log(e)
         } finally {
@@ -82,11 +80,7 @@ export const TodoState = ({ children }) => {
     const updateTodo = async (id, title) => {
         clearError()
         try {
-            await fetch(`https://rn-appka-default-rtdb.firebaseio.com/todos/${id}.json`, {
-                method: 'PATCH',
-                headers: {'Content-Type' : 'application/json'},
-                body: JSON.stringify({title})
-            })
+            await Http.patch(`https://rn-appka-default-rtdb.firebaseio.com/todos/${id}.json`, {title})
             dispatch({type: UPDATE_TODO, id, title})
         } catch (e) {
             showError('Что-то пошло не так, попробуйте снова')
@@ -98,7 +92,7 @@ export const TodoState = ({ children }) => {
 
     const hideLoader = () => dispatch({type: HIDE_LOADER})
 
-    const showError = error => dispatch({type: SHOW_ERROR, error })
+    const showError = error => dispatch({type: SHOW_ERROR, error})
 
     const clearError = () => dispatch({type: CLEAR_ERROR})
 
