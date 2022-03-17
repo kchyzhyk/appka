@@ -28,10 +28,10 @@ export const TodoState = ({children}) => {
         clearError()
 
         try {
-            const data = await Http.post(
-                'https://rn-appka-default-rtdb.firebaseio.com/todos.json',
-                {title})
-            dispatch({type: ADD_TODO, title, id: data.name})
+            // const data = await Http.post(
+            //     'https://rn-appka-default-rtdb.firebaseio.com/todos.json',
+            //     {title})
+            dispatch({type: ADD_TODO, title, id: title})
         } catch (e) {
             // showError('Что-то пошло не так...')
             showError('addTodo')
@@ -53,7 +53,7 @@ export const TodoState = ({children}) => {
                     style: 'destructive',
                     onPress: async () => {
                         changeScreen(null)
-                        await Http.delete(`https://rn-appka-default-rtdb.firebaseio.com/todos/${id}.json`)
+                        // await Http.delete(`https://rn-appka-default-rtdb.firebaseio.com/todos/${id}.json`)
                         dispatch({type: REMOVE_TODO, id})
                     }
                 }
@@ -62,20 +62,20 @@ export const TodoState = ({children}) => {
         )
     }
 
-    const fetchTodos = async () => {
-        showLoader()
-        clearError()
-        try {
-            const data = await Http.get('https://rn-appka-default-rtdb.firebaseio.com/todos.json')
-            const todos = Object.keys(data).map(key => ({...data[key], id: key}))
-            dispatch({type: FETCH_TODOS, todos})
-        } catch (e) {
-            showError('Что-то пошло не так, попробуйте снова')
-            console.log(e)
-        } finally {
-            hideLoader()
-        }
-    }
+    // const fetchTodos = async () => {
+    //     showLoader()
+    //     clearError()
+    //     try {
+    //         const data = await Http.get('https://rn-appka-default-rtdb.firebaseio.com/todos.json')
+    //         const todos = Object.keys(data).map(key => ({...data[key], id: key}))
+    //         dispatch({type: FETCH_TODOS, todos})
+    //     } catch (e) {
+    //         showError('Что-то пошло не так, попробуйте снова')
+    //         console.log(e)
+    //     } finally {
+    //         hideLoader()
+    //     }
+    // }
 
     const updateTodo = async (id, title) => {
         clearError()
@@ -104,7 +104,7 @@ export const TodoState = ({children}) => {
             addTodo,
             removeTodo,
             updateTodo,
-            fetchTodos
+            // fetchTodos
         }}
     >
         {children}

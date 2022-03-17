@@ -10,15 +10,17 @@ import {AppText} from "../components/ui/AppText";
 import {AppButton} from "../components/ui/AppButton";
 
 export const MainScreen = () => {
-    const {addTodo, todos, removeTodo, fetchTodos, loading, error} = useContext(TodoContext)
+    const {addTodo, todos, removeTodo,
+        // fetchTodos,
+        loading, error} = useContext(TodoContext)
     const {changeScreen} = useContext(ScreenContext)
     const [deviceWidth, setDeviceWidth] = useState(Dimensions.get('window').width - THEME.PADDING_HORIZONTAL * 2)
 
-    const loadTodos = useCallback(async () => await fetchTodos(), [fetchTodos])
+    // const loadTodos = useCallback(async () => await fetchTodos(), [fetchTodos])
 
-    useEffect(() => {
-        loadTodos()
-    }, [])
+    // useEffect(() => {
+    //     loadTodos()
+    // }, [])
 
     useEffect(() => {
         const update = () => {
@@ -46,7 +48,7 @@ export const MainScreen = () => {
     let content = (
         <View style={{width: deviceWidth}}>
             <FlatList
-                keyExtractor={item => item.id.toString()}
+                // keyExtractor={item => item.id.toString()}
                 data={todos}
                 renderItem={({item}) => (
                     <Todo todo={item} onRemove={removeTodo} onOpen={changeScreen}/>
